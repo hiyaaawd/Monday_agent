@@ -4,6 +4,7 @@ Model = "Beta 1"
 programnames = {"task manager": "taskmgr.exe", "calculator": "calc.exe", "notepad": "notepad.exe"}
 ##################################################################################################
 import os
+import datetime
 #Imports
 try:
     import requests
@@ -46,6 +47,7 @@ def speak(text):
     if engine and text:
         try:
             engine.say(text)
+            engine.runAndWait()
         except Exception as e:
             print(f"Error queuing text for speech: {e}")
     elif not engine:
@@ -225,6 +227,7 @@ while listening == True:
                 listening = False
         except sr.UnknownValueError:
             print("Monday could not understand audio (Google Web Speech API did not understand).")
+            speak("Sorry, I could not understand you.")
         except sr.RequestError as e:
             print(f"Could not request results from Google Web Speech API service; {e}")
             speak("I'm having trouble connecting to the speech recognition service.")
@@ -260,12 +263,7 @@ while listening == True:
         if monday_full_response_text:
             print("Response received from AI")
             speak(monday_full_response_text)
-            
             past = monday_full_response_text
-        
-        if engine._inLoop:
-            engine.endLoop()
-        engine.runAndWait()
 
     elif word:
         print("Monday not detected in your input")
